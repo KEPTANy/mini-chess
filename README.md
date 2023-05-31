@@ -12,7 +12,5 @@ Mini chess is a simple chess engine for 5x6 game variation.
 3. Pawns have no 2-square push option, therefore no en-passant option either. Other pieces move the same way they do in
 classical chess
 4. Pawns can promote to only those pieces that were chosen to play with
-5. If there is a king in the center, a rook in the corner and they both did not move, castling is allowed: the king moves 1
-square towards the rook and the rook moves 2 squares towards the king. King must not be in check at the beginning and at the end
-of the castling
+5. Castling is not allowed in any form
 6. The threefold repetition and the 50-move rule apply
