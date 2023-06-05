@@ -62,14 +62,17 @@ enum {
 };
 
 // color.c
+
 Color color_inverse(Color color);
 
 // piece.c
+
 Piece     piece_create(Color color, PieceType type);
 Color     piece_get_color(Piece piece);
 PieceType piece_get_type(Piece piece);
 
 // square.c
+
 Square square_create(File file, Rank rank);
 File   square_get_file(Square square);
 Rank   square_get_rank(Square square);
