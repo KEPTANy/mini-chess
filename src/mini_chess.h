@@ -58,7 +58,7 @@ enum {
     S_A5, S_B5, S_C5, S_D5, S_E5,
     S_A6, S_B6, S_C6, S_D6, S_E6,
 
-    S_NUM
+    SQUARE_NUM
 };
 
 // color.c
