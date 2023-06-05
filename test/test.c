@@ -59,9 +59,105 @@ void test_piece() {
 
 }
 
+void test_square() {
+    ASSERT(square_create(F_A, R_1) == S_A1);
+    ASSERT(square_create(F_B, R_1) == S_B1);
+    ASSERT(square_create(F_C, R_1) == S_C1);
+    ASSERT(square_create(F_D, R_1) == S_D1);
+    ASSERT(square_create(F_E, R_1) == S_E1);
+    ASSERT(square_create(F_A, R_2) == S_A2);
+    ASSERT(square_create(F_B, R_2) == S_B2);
+    ASSERT(square_create(F_C, R_2) == S_C2);
+    ASSERT(square_create(F_D, R_2) == S_D2);
+    ASSERT(square_create(F_E, R_2) == S_E2);
+    ASSERT(square_create(F_A, R_3) == S_A3);
+    ASSERT(square_create(F_B, R_3) == S_B3);
+    ASSERT(square_create(F_C, R_3) == S_C3);
+    ASSERT(square_create(F_D, R_3) == S_D3);
+    ASSERT(square_create(F_E, R_3) == S_E3);
+    ASSERT(square_create(F_A, R_4) == S_A4);
+    ASSERT(square_create(F_B, R_4) == S_B4);
+    ASSERT(square_create(F_C, R_4) == S_C4);
+    ASSERT(square_create(F_D, R_4) == S_D4);
+    ASSERT(square_create(F_E, R_4) == S_E4);
+    ASSERT(square_create(F_A, R_5) == S_A5);
+    ASSERT(square_create(F_B, R_5) == S_B5);
+    ASSERT(square_create(F_C, R_5) == S_C5);
+    ASSERT(square_create(F_D, R_5) == S_D5);
+    ASSERT(square_create(F_E, R_5) == S_E5);
+    ASSERT(square_create(F_A, R_6) == S_A6);
+    ASSERT(square_create(F_B, R_6) == S_B6);
+    ASSERT(square_create(F_C, R_6) == S_C6);
+    ASSERT(square_create(F_D, R_6) == S_D6);
+    ASSERT(square_create(F_E, R_6) == S_E6);
+
+    ASSERT(square_get_rank(S_A1) == R_1);
+    ASSERT(square_get_rank(S_B1) == R_1);
+    ASSERT(square_get_rank(S_C1) == R_1);
+    ASSERT(square_get_rank(S_D1) == R_1);
+    ASSERT(square_get_rank(S_E1) == R_1);
+    ASSERT(square_get_rank(S_A2) == R_2);
+    ASSERT(square_get_rank(S_B2) == R_2);
+    ASSERT(square_get_rank(S_C2) == R_2);
+    ASSERT(square_get_rank(S_D2) == R_2);
+    ASSERT(square_get_rank(S_E2) == R_2);
+    ASSERT(square_get_rank(S_A3) == R_3);
+    ASSERT(square_get_rank(S_B3) == R_3);
+    ASSERT(square_get_rank(S_C3) == R_3);
+    ASSERT(square_get_rank(S_D3) == R_3);
+    ASSERT(square_get_rank(S_E3) == R_3);
+    ASSERT(square_get_rank(S_A4) == R_4);
+    ASSERT(square_get_rank(S_B4) == R_4);
+    ASSERT(square_get_rank(S_C4) == R_4);
+    ASSERT(square_get_rank(S_D4) == R_4);
+    ASSERT(square_get_rank(S_E4) == R_4);
+    ASSERT(square_get_rank(S_A5) == R_5);
+    ASSERT(square_get_rank(S_B5) == R_5);
+    ASSERT(square_get_rank(S_C5) == R_5);
+    ASSERT(square_get_rank(S_D5) == R_5);
+    ASSERT(square_get_rank(S_E5) == R_5);
+    ASSERT(square_get_rank(S_A6) == R_6);
+    ASSERT(square_get_rank(S_B6) == R_6);
+    ASSERT(square_get_rank(S_C6) == R_6);
+    ASSERT(square_get_rank(S_D6) == R_6);
+    ASSERT(square_get_rank(S_E6) == R_6);
+
+    ASSERT(square_get_file(S_A1) == F_A);
+    ASSERT(square_get_file(S_B1) == F_B);
+    ASSERT(square_get_file(S_C1) == F_C);
+    ASSERT(square_get_file(S_D1) == F_D);
+    ASSERT(square_get_file(S_E1) == F_E);
+    ASSERT(square_get_file(S_A2) == F_A);
+    ASSERT(square_get_file(S_B2) == F_B);
+    ASSERT(square_get_file(S_C2) == F_C);
+    ASSERT(square_get_file(S_D2) == F_D);
+    ASSERT(square_get_file(S_E2) == F_E);
+    ASSERT(square_get_file(S_A3) == F_A);
+    ASSERT(square_get_file(S_B3) == F_B);
+    ASSERT(square_get_file(S_C3) == F_C);
+    ASSERT(square_get_file(S_D3) == F_D);
+    ASSERT(square_get_file(S_E3) == F_E);
+    ASSERT(square_get_file(S_A4) == F_A);
+    ASSERT(square_get_file(S_B4) == F_B);
+    ASSERT(square_get_file(S_C4) == F_C);
+    ASSERT(square_get_file(S_D4) == F_D);
+    ASSERT(square_get_file(S_E4) == F_E);
+    ASSERT(square_get_file(S_A5) == F_A);
+    ASSERT(square_get_file(S_B5) == F_B);
+    ASSERT(square_get_file(S_C5) == F_C);
+    ASSERT(square_get_file(S_D5) == F_D);
+    ASSERT(square_get_file(S_E5) == F_E);
+    ASSERT(square_get_file(S_A6) == F_A);
+    ASSERT(square_get_file(S_B6) == F_B);
+    ASSERT(square_get_file(S_C6) == F_C);
+    ASSERT(square_get_file(S_D6) == F_D);
+    ASSERT(square_get_file(S_E6) == F_E);
+}
+
 int main() {
     test_color();
     test_piece();
+    test_square();
 
     puts("All tests passed");
     return 0;

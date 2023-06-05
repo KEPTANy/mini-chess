@@ -1,5 +1,6 @@
 SRCS = src/color.c \
-	   src/piece.c
+	   src/piece.c \
+	   src/square.c
 
 test: test/test.c clean
 	$(CC) -o build/test test/test.c $(SRCS)
