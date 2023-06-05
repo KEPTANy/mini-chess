@@ -1,4 +1,5 @@
-SRCS = src/color.c \
+SRCS = src/bitboard.c \
+	   src/color.c \
 	   src/piece.c \
 	   src/square.c
 

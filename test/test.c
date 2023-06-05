@@ -154,10 +154,33 @@ void test_square() {
     ASSERT(square_get_file(S_E6) == F_E);
 }
 
+void test_bitboard() {
+    ASSERT(bitboard_of_file(F_A) == BB_FILE_A);
+    ASSERT(bitboard_of_file(F_B) == BB_FILE_B);
+    ASSERT(bitboard_of_file(F_C) == BB_FILE_C);
+    ASSERT(bitboard_of_file(F_D) == BB_FILE_D);
+    ASSERT(bitboard_of_file(F_E) == BB_FILE_E);
+
+    ASSERT(bitboard_of_rank(R_1) == BB_RANK_1);
+    ASSERT(bitboard_of_rank(R_2) == BB_RANK_2);
+    ASSERT(bitboard_of_rank(R_3) == BB_RANK_3);
+    ASSERT(bitboard_of_rank(R_4) == BB_RANK_4);
+    ASSERT(bitboard_of_rank(R_5) == BB_RANK_5);
+    ASSERT(bitboard_of_rank(R_6) == BB_RANK_6);
+
+    for (Square s = S_A1; s < SQUARE_NUM; s++) {
+        Bitboard bb_sqr  = bitboard_of_square(s),
+                 bb_file = bitboard_of_file(square_get_file(s)),
+                 bb_rank = bitboard_of_rank(square_get_rank(s));
+        ASSERT(bb_sqr == (bb_file & bb_rank));
+    }
+}
+
 int main() {
     test_color();
     test_piece();
     test_square();
+    test_bitboard();
 
     puts("All tests passed");
     return 0;
