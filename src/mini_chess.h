@@ -2,6 +2,7 @@
 #define MINI_CHESS_H
 
 #include <inttypes.h>
+#include <stdbool.h>
 
 typedef uint8_t Color;
 enum {
@@ -81,6 +82,14 @@ enum {
     BB_ALL_SQUARES   = 0b111111111111111111111111111111
 };
 
+typedef struct Position {
+    Bitboard color[COLOR_NUM];
+    Bitboard piece[PIECE_TYPE_NUM];
+    Color    side_to_move;
+    uint8_t  rule50;
+    uint16_t move_count;
+} Position;
+
 // bitboard.c
 
 Bitboard bitboard_of_square(Square square);
@@ -96,6 +105,10 @@ Color color_inverse(Color color);
 Piece     piece_create(Color color, PieceType type);
 Color     piece_get_color(Piece piece);
 PieceType piece_get_type(Piece piece);
+
+// position.c
+
+bool position_are_equal(Position *a, Position *b);
 
 // square.c
 
