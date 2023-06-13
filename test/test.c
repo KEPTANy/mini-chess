@@ -176,11 +176,19 @@ void test_bitboard() {
     }
 }
 
+void test_direction() {
+    ASSERT(direction_shift(BB_RANK_1, D_N) == BB_RANK_2);
+    ASSERT(direction_shift(BB_RANK_2, D_S) == BB_RANK_1);
+    ASSERT(direction_shift(BB_FILE_B, D_E) == BB_FILE_C);
+    ASSERT(direction_shift(BB_FILE_D, D_W) == BB_FILE_C);
+}
+
 int main() {
     test_color();
     test_piece();
     test_square();
     test_bitboard();
+    test_direction();
 
     puts("All tests passed");
     return 0;

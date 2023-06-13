@@ -1,6 +1,8 @@
 SRCS = src/bitboard.c \
 	   src/color.c \
+	   src/direction.c \
 	   src/piece.c \
+	   src/position.c \
 	   src/square.c
 
 test: test/test.c clean
