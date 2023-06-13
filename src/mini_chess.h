@@ -62,6 +62,28 @@ enum {
     SQUARE_NUM
 };
 
+typedef int8_t Direction;
+enum {
+    D_N = FILE_NUM,
+    D_E = 1,
+    D_S = -D_N,
+    D_W = -D_E,
+
+    D_NE = D_N + D_E,
+    D_SE = D_S + D_E,
+    D_SW = D_S + D_W,
+    D_NW = D_N + D_W,
+
+    D_NNE = D_N + D_N + D_E,
+    D_NEE = D_N + D_E + D_E,
+    D_SEE = D_S + D_E + D_E,
+    D_SSE = D_S + D_S + D_E,
+    D_SSW = D_S + D_S + D_W,
+    D_SWW = D_S + D_W + D_W,
+    D_NWW = D_N + D_W + D_W,
+    D_NNW = D_N + D_N + D_W,
+};
+
 typedef uint32_t Bitboard;
 enum {
     BB_FILE_A = 0b000010000100001000010000100001,
@@ -99,6 +121,10 @@ Bitboard bitboard_of_rank(Rank rank);
 // color.c
 
 Color color_inverse(Color color);
+
+// direction.c
+
+Bitboard direction_shift(Bitboard bitboard, Direction direction);
 
 // piece.c
 
