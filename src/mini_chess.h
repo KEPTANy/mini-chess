@@ -134,7 +134,7 @@ PieceType piece_get_type(Piece piece);
 
 // position.c
 
-bool position_are_equal(Position *a, Position *b);
+bool position_equal(Position *a, Position *b);
 
 // square.c
 

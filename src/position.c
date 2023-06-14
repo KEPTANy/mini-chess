@@ -1,6 +1,6 @@
 #include "mini_chess.h"
 
-bool position_are_equal(Position *a, Position *b) {
+bool position_equal(Position *a, Position *b) {
     if (a->side_to_move != a->side_to_move)
         return false;
 
