@@ -189,12 +189,219 @@ void test_direction() {
     ASSERT(direction_shift(BB_FILE_D, D_W) == BB_FILE_C);
 }
 
+void test_attacks() {
+    // Pawns
+
+    // . . . . .
+    // . . . . .
+    // . . . . .
+    // . x . . .
+    // P . . . .
+    // . . . . .
+    ASSERT(attacks_pawn(S_A2, C_WHITE) == 2048);
+
+    // . . . . .
+    // . . . p .
+    // . . x . x
+    // . . . . .
+    // . . . . .
+    // . . . . .
+    ASSERT(attacks_pawn(S_D5, C_BLACK) == 655360);
+
+    // . . . . .
+    // x . x . .
+    // .(P). x .
+    // . x P x .
+    // P . . . P
+    // . . . . .
+    ASSERT(attacks_pawns(70176, C_WHITE) == 5580800);
+
+    // . . . . .
+    // p p p p p
+    // x x x x x
+    // . . . . .
+    // . . . . .
+    // . . . . .
+    ASSERT(attacks_pawns(32505856, C_BLACK) == 1015808);
+
+    // Knights
+
+    // . . . . .
+    // . x . x .
+    // x . . . x
+    // . . N . .
+    // x . . . x
+    // . x . x .
+    ASSERT(attacks_knight(S_C3) == 11043370);
+
+    // . . . . .
+    // . . . . .
+    // . . . . .
+    // . x . . .
+    // . . x . .
+    // N . . . .
+    ASSERT(attacks_knight(S_A1) == 2176);
+
+    // . . . . .
+    // . . . . .
+    // x x x x x
+    // x x x x x
+    // N N N N N
+    // x x x x x
+    ASSERT(attacks_knights(992) == 1047583);
+
+    // . . . x .
+    // . N x . .
+    // . x . x N
+    // x . x . x
+    // . . N x .
+    // x . . . x
+    ASSERT((attacks_knights(2621568) & BB_ALL_SQUARES) == 272979217);
+
+    // Bishops
+
+    // . . . x .
+    // x . x . .
+    // . B . . .
+    // x . x . .
+    // . . . x .
+    // . . . . x
+    ASSERT((attacks_bishop(S_B4, 65536) & BB_ALL_SQUARES) == 273683728);
+
+    // . . . K .
+    // x . . . .
+    // . x .(P).
+    // . . B . .
+    // k x .(r).
+    // x n . . .
+    ASSERT(attacks_bishop(S_C3, 268701986) == 1376577);
+
+    // x x x x r
+    // . B B . .
+    // x x x x .
+    // x . .(p)x
+    // . . . k .
+    // K . . . .
+    ASSERT(attacks_bishops(6291456, 543170817) == 503833600);
+
+    // . . . . x
+    // . . . x .
+    // x . x . .
+    // .(B). . .
+    // x . x . x
+    // . . .(B).
+    ASSERT(attacks_bishops(2056, 2056) == 545426088);
+
+    // Rooks
+
+    // . . . . .
+    // . . . . .
+    //(p). . . .
+    // x . . . .
+    // x . . . .
+    // R x(n). .
+    ASSERT(attacks_rook(S_A1, 32773) == 33830);
+
+    // . . x . .
+    // . . x . .
+    // x x R x x
+    // . . x . .
+    // . . x . .
+    // . . x . .
+    ASSERT(attacks_rook(S_C4, 131072) == 139300996);
+
+    // . x x . .
+    // . x x . .
+    // x x R x x
+    // . x x . .
+    // x R x x x
+    // . x x . .
+    ASSERT((attacks_rooks(131136, 131136) & BB_ALL_SQUARES) == 208509862);
+
+    // . . . . .
+    // . . . . .
+    // . .(p). .
+    // x x(R)x x
+    // x x(R)x(p)
+    // . . x . .
+    ASSERT(attacks_rooks(4224, 135808) == 163812);
+
+    // Queens
+
+    // x . x . x
+    // . x x x .
+    // x x Q x x
+    // . x x x .
+    // x . x . x
+    // . . x . .
+    ASSERT(attacks_queen(S_C4, 131072) == 720222884);
+
+    // . . x . x
+    // .(r)x x .
+    // x x Q(p).
+    // . x x x .
+    //(N). x . x
+    // . . x . .
+    ASSERT(attacks_queen(S_C4, 2490400) == 686144164);
+
+    // . x x x .
+    // x x Q x x
+    // . x x x .
+    // x x x . x
+    // x Q x x x
+    // x x x . .
+    ASSERT(attacks_queens(4194368, 4194368) == 498556839);
+
+    // . . . . .
+    // . . . . .
+    //(r). . . .
+    // x .(n).(p)
+    // x x . x x
+    //(Q)x x x(Q)
+    ASSERT(attacks_queens(17, 53265) == 55167);
+
+    // Kings
+
+    // . . . . .
+    // . . . . .
+    // x x . . .
+    // K x . . .
+    // x x . . .
+    // . . . . .
+    ASSERT(attacks_king(S_A3) == 100448);
+
+    // . . . . .
+    // . . . . .
+    // . . . . .
+    // . . . . .
+    // . . . x x
+    // . . . x K
+    ASSERT(attacks_king(S_E1) == 776);
+
+    // . . . . .
+    // . x x x .
+    // . x K x .
+    // . x x x .
+    // . . . x x
+    // . . . x K
+    ASSERT(attacks_kings(131088) == 15022856);
+
+    // . . . . .
+    // . . . . .
+    // . . . . .
+    // . . . . .
+    // x x . x x
+    // K x . x K
+    ASSERT(attacks_kings(17) == 874);
+}
+
 int main() {
     test_color();
     test_piece();
     test_square();
     test_bitboard();
     test_direction();
+    test_attacks();
 
     puts("All tests passed");
     return 0;

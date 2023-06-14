@@ -3,6 +3,9 @@
 
 #include <inttypes.h>
 #include <stdbool.h>
+#include <stdlib.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 typedef uint8_t Color;
 enum {
@@ -111,6 +114,22 @@ typedef struct Position {
     uint8_t  rule50;
     uint16_t move_count;
 } Position;
+
+// attacks.c
+
+Bitboard attacks_pawn(Square square, Color color);
+Bitboard attacks_knight(Square square);
+Bitboard attacks_bishop(Square square, Bitboard occupied);
+Bitboard attacks_rook(Square square, Bitboard occupied);
+Bitboard attacks_queen(Square square, Bitboard occupied);
+Bitboard attacks_king(Square square);
+
+Bitboard attacks_pawns(Bitboard pawns, Color color);
+Bitboard attacks_knights(Bitboard knights);
+Bitboard attacks_bishops(Bitboard bishops, Bitboard occupied);
+Bitboard attacks_rooks(Bitboard rooks, Bitboard occupied);
+Bitboard attacks_queens(Bitboard queens, Bitboard occupied);
+Bitboard attacks_kings(Bitboard kings);
 
 // bitboard.c
 
