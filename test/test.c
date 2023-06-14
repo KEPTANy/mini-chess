@@ -152,6 +152,12 @@ void test_square() {
     ASSERT(square_get_file(S_C6) == F_C);
     ASSERT(square_get_file(S_D6) == F_D);
     ASSERT(square_get_file(S_E6) == F_E);
+
+    ASSERT(square_distance(S_A1, S_E6) == square_distance(S_E6, S_A1));
+    ASSERT(square_distance(S_A1, S_E6) == 5);
+    ASSERT(square_distance(S_A1, S_A1) == 0);
+    ASSERT(square_distance(S_E6, S_E5) == 1);
+    ASSERT(square_distance(S_E6, S_D6) == 1);
 }
 
 void test_bitboard() {

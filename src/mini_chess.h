@@ -138,8 +138,9 @@ bool position_are_equal(Position *a, Position *b);
 
 // square.c
 
-Square square_create(File file, Rank rank);
-File   square_get_file(Square square);
-Rank   square_get_rank(Square square);
+Square  square_create(File file, Rank rank);
+File    square_get_file(Square square);
+Rank    square_get_rank(Square square);
+uint8_t square_distance(Square a, Square b);
 
 #endif
