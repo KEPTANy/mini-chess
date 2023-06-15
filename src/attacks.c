@@ -70,17 +70,15 @@ Bitboard attacks_knights(Bitboard knights) {
 
 Bitboard attacks_bishops(Bitboard bishops, Bitboard occupied) {
     Bitboard res = 0;
-    for (Square s = S_A1; s < SQUARE_NUM; s++)
-        if (bishops & bitboard_of_square(s))
-            res |= attacks_bishop(s, occupied);
+    while (bishops)
+        res |= attacks_bishop(pop_lsb((uint64_t *)&bishops), occupied);
     return res;
 }
 
 Bitboard attacks_rooks(Bitboard rooks, Bitboard occupied) {
     Bitboard res = 0;
-    for (Square s = S_A1; s < SQUARE_NUM; s++)
-        if (rooks & bitboard_of_square(s))
-            res |= attacks_rook(s, occupied);
+    while (rooks)
+        res |= attacks_rook(pop_lsb((uint64_t *)&rooks), occupied);
     return res;
 }
 
