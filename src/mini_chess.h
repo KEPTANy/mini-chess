@@ -153,7 +153,8 @@ PieceType piece_get_type(Piece piece);
 
 // position.c
 
-bool position_equal(Position *a, Position *b);
+bool     position_equal(Position *a, Position *b);
+Bitboard position_attacks(Position *pos, Color side);
 
 // square.c
 
