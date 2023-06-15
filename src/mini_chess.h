@@ -137,6 +137,13 @@ Bitboard bitboard_of_square(Square square);
 Bitboard bitboard_of_file(File file);
 Bitboard bitboard_of_rank(Rank rank);
 
+// bitops.c
+
+int32_t popcnt(uint64_t n);
+int32_t lsb(uint64_t n);
+int32_t msb(uint64_t n);
+int32_t pop_lsb(uint64_t *n);
+
 // color.c
 
 Color color_inverse(Color color);
