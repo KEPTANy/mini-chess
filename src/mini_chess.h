@@ -65,6 +65,15 @@ enum {
     SQUARE_NUM
 };
 
+// Move is encoded as 0bPTTTTCDDDDDSSSSS, where:
+// P - set if move is promotion
+// T - set if P is set, promotion piece type
+// C - set if move is capture
+// D - destination square
+// S - source square
+
+typedef uint16_t Move;
+
 typedef int8_t Direction;
 enum {
     D_N = FILE_NUM,
@@ -151,6 +160,23 @@ Color color_inverse(Color color);
 // direction.c
 
 Bitboard direction_shift(Bitboard bitboard, Direction direction);
+
+// move.c
+
+Move   move_create(Square source, Square destination, bool is_capture);
+Move   move_promotion_create(Square source, Square destination, Piece promoted_to, bool is_capture);
+Square move_get_source(Move move);
+Square move_get_destination(Move move);
+Piece  move_get_promotion_type(Move move);
+bool   move_is_capture(Move move);
+bool   move_is_promotion(Move move);
+
+// Move is encoded as 0bPTTTTCDDDDDSSSSS, where:
+// P - set if move is promotion
+// T - set if P is set, promotion piece type
+// C - set if move is capture
+// D - destination square
+// S - source square
 
 // piece.c
 

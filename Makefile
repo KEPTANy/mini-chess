@@ -3,6 +3,7 @@ SRCS = src/attacks.c \
 	   src/bitops.c \
 	   src/color.c \
 	   src/direction.c \
+	   src/move.c \
 	   src/piece.c \
 	   src/position.c \
 	   src/square.c
