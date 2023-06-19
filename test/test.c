@@ -198,7 +198,7 @@ void test_attacks() {
     // . x . . .
     // P . . . .
     // . . . . .
-    ASSERT(attacks_pawn(S_A2, C_WHITE) == 2048);
+    ASSERT((attacks_pawn(S_A2, C_WHITE) & BB_ALL_SQUARES) == 2048);
 
     // . . . . .
     // . . . p .
@@ -206,7 +206,7 @@ void test_attacks() {
     // . . . . .
     // . . . . .
     // . . . . .
-    ASSERT(attacks_pawn(S_D5, C_BLACK) == 655360);
+    ASSERT((attacks_pawn(S_D5, C_BLACK) & BB_ALL_SQUARES) == 655360);
 
     // . . . . .
     // x . x . .
@@ -214,7 +214,7 @@ void test_attacks() {
     // . x P x .
     // P . . . P
     // . . . . .
-    ASSERT(attacks_pawns(70176, C_WHITE) == 5580800);
+    ASSERT((attacks_pawns(70176, C_WHITE) & BB_ALL_SQUARES) == 5580800);
 
     // . . . . .
     // p p p p p
@@ -222,7 +222,7 @@ void test_attacks() {
     // . . . . .
     // . . . . .
     // . . . . .
-    ASSERT(attacks_pawns(32505856, C_BLACK) == 1015808);
+    ASSERT((attacks_pawns(32505856, C_BLACK) & BB_ALL_SQUARES) == 1015808);
 
     // Knights
 
@@ -232,7 +232,7 @@ void test_attacks() {
     // . . N . .
     // x . . . x
     // . x . x .
-    ASSERT(attacks_knight(S_C3) == 11043370);
+    ASSERT((attacks_knight(S_C3) & BB_ALL_SQUARES) == 11043370);
 
     // . . . . .
     // . . . . .
@@ -240,7 +240,7 @@ void test_attacks() {
     // . x . . .
     // . . x . .
     // N . . . .
-    ASSERT(attacks_knight(S_A1) == 2176);
+    ASSERT((attacks_knight(S_A1) & BB_ALL_SQUARES) == 2176);
 
     // . . . . .
     // . . . . .
@@ -248,7 +248,7 @@ void test_attacks() {
     // x x x x x
     // N N N N N
     // x x x x x
-    ASSERT(attacks_knights(992) == 1047583);
+    ASSERT((attacks_knights(992) & BB_ALL_SQUARES) == 1047583);
 
     // . . . x .
     // . N x . .
@@ -274,7 +274,7 @@ void test_attacks() {
     // . . B . .
     // k x .(r).
     // x n . . .
-    ASSERT(attacks_bishop(S_C3, 268701986) == 1376577);
+    ASSERT((attacks_bishop(S_C3, 268701986) & BB_ALL_SQUARES) == 1376577);
 
     // x x x x r
     // . B B . .
@@ -282,7 +282,7 @@ void test_attacks() {
     // x . .(p)x
     // . . . k .
     // K . . . .
-    ASSERT(attacks_bishops(6291456, 543170817) == 503833600);
+    ASSERT((attacks_bishops(6291456, 543170817) & BB_ALL_SQUARES) == 503833600);
 
     // . . . . x
     // . . . x .
@@ -290,7 +290,7 @@ void test_attacks() {
     // .(B). . .
     // x . x . x
     // . . .(B).
-    ASSERT(attacks_bishops(2056, 2056) == 545426088);
+    ASSERT((attacks_bishops(2056, 2056) & BB_ALL_SQUARES) == 545426088);
 
     // Rooks
 
@@ -300,7 +300,7 @@ void test_attacks() {
     // x . . . .
     // x . . . .
     // R x(n). .
-    ASSERT(attacks_rook(S_A1, 32773) == 33830);
+    ASSERT((attacks_rook(S_A1, 32773) & BB_ALL_SQUARES) == 33830);
 
     // . . x . .
     // . . x . .
@@ -308,7 +308,7 @@ void test_attacks() {
     // . . x . .
     // . . x . .
     // . . x . .
-    ASSERT(attacks_rook(S_C4, 131072) == 139300996);
+    ASSERT((attacks_rook(S_C4, 131072) & BB_ALL_SQUARES) == 139300996);
 
     // . x x . .
     // . x x . .
@@ -324,7 +324,7 @@ void test_attacks() {
     // x x(R)x x
     // x x(R)x(p)
     // . . x . .
-    ASSERT(attacks_rooks(4224, 135808) == 163812);
+    ASSERT((attacks_rooks(4224, 135808) & BB_ALL_SQUARES) == 163812);
 
     // Queens
 
@@ -334,7 +334,7 @@ void test_attacks() {
     // . x x x .
     // x . x . x
     // . . x . .
-    ASSERT(attacks_queen(S_C4, 131072) == 720222884);
+    ASSERT((attacks_queen(S_C4, 131072) & BB_ALL_SQUARES) == 720222884);
 
     // . . x . x
     // .(r)x x .
@@ -342,7 +342,7 @@ void test_attacks() {
     // . x x x .
     //(N). x . x
     // . . x . .
-    ASSERT(attacks_queen(S_C4, 2490400) == 686144164);
+    ASSERT((attacks_queen(S_C4, 2490400) & BB_ALL_SQUARES) == 686144164);
 
     // . x x x .
     // x x Q x x
@@ -350,7 +350,7 @@ void test_attacks() {
     // x x x . x
     // x Q x x x
     // x x x . .
-    ASSERT(attacks_queens(4194368, 4194368) == 498556839);
+    ASSERT((attacks_queens(4194368, 4194368) & BB_ALL_SQUARES) == 498556839);
 
     // . . . . .
     // . . . . .
@@ -358,7 +358,7 @@ void test_attacks() {
     // x .(n).(p)
     // x x . x x
     //(Q)x x x(Q)
-    ASSERT(attacks_queens(17, 53265) == 55167);
+    ASSERT((attacks_queens(17, 53265) & BB_ALL_SQUARES) == 55167);
 
     // Kings
 
@@ -368,7 +368,7 @@ void test_attacks() {
     // K x . . .
     // x x . . .
     // . . . . .
-    ASSERT(attacks_king(S_A3) == 100448);
+    ASSERT((attacks_king(S_A3) & BB_ALL_SQUARES) == 100448);
 
     // . . . . .
     // . . . . .
@@ -376,7 +376,7 @@ void test_attacks() {
     // . . . . .
     // . . . x x
     // . . . x K
-    ASSERT(attacks_king(S_E1) == 776);
+    ASSERT((attacks_king(S_E1) & BB_ALL_SQUARES) == 776);
 
     // . . . . .
     // . x x x .
@@ -384,7 +384,7 @@ void test_attacks() {
     // . x x x .
     // . . . x x
     // . . . x K
-    ASSERT(attacks_kings(131088) == 15022856);
+    ASSERT((attacks_kings(131088) & BB_ALL_SQUARES) == 15022856);
 
     // . . . . .
     // . . . . .
@@ -392,7 +392,7 @@ void test_attacks() {
     // . . . . .
     // x x . x x
     // K x . x K
-    ASSERT(attacks_kings(17) == 874);
+    ASSERT((attacks_kings(17) & BB_ALL_SQUARES) == 874);
 }
 
 int main() {
