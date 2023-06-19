@@ -21,7 +21,7 @@ Bitboard attacks_bishop(Square square, Bitboard occupied) {
                 break;
         }
     }
-    return res;
+    return BB_ALL_SQUARES & res;
 }
 
 Bitboard attacks_rook(Square square, Bitboard occupied) {
@@ -37,7 +37,7 @@ Bitboard attacks_rook(Square square, Bitboard occupied) {
                 break;
         }
     }
-    return res;
+    return BB_ALL_SQUARES & res;
 }
 
 Bitboard attacks_queen(Square square, Bitboard occupied) {
@@ -49,23 +49,22 @@ Bitboard attacks_king(Square square) {
 }
 
 Bitboard attacks_pawns(Bitboard pawns, Color color) {
-    if (color == C_WHITE)
-        return (direction_shift(pawns & ~BB_FILE_E, D_NE)) |
-               (direction_shift(pawns & ~BB_FILE_A, D_NW));
-    else
-        return (direction_shift(pawns & ~BB_FILE_E, D_SE)) |
-               (direction_shift(pawns & ~BB_FILE_A, D_SW));
+    return BB_ALL_SQUARES &
+           ((color == C_WHITE)
+           ? (direction_shift(pawns & ~BB_FILE_E, D_NE)) | (direction_shift(pawns & ~BB_FILE_A, D_NW)) 
+           : (direction_shift(pawns & ~BB_FILE_E, D_SE)) | (direction_shift(pawns & ~BB_FILE_A, D_SW)));
 }
 
 Bitboard attacks_knights(Bitboard knights) {
-    return (direction_shift(knights & ~BB_FILE_E, D_NNE)) |
-           (direction_shift(knights & ~BB_FILE_E, D_SSE)) |
-           (direction_shift(knights & ~BB_FILE_A, D_SSW)) |
-           (direction_shift(knights & ~BB_FILE_A, D_NNW)) |
-           (direction_shift(knights & ~(BB_FILE_D | BB_FILE_E), D_NEE)) |
-           (direction_shift(knights & ~(BB_FILE_D | BB_FILE_E), D_SEE)) |
-           (direction_shift(knights & ~(BB_FILE_A | BB_FILE_B), D_SWW)) |
-           (direction_shift(knights & ~(BB_FILE_A | BB_FILE_B), D_NWW));
+    return BB_ALL_SQUARES &
+           ((direction_shift(knights & ~BB_FILE_E, D_NNE)) |
+            (direction_shift(knights & ~BB_FILE_E, D_SSE)) |
+            (direction_shift(knights & ~BB_FILE_A, D_SSW)) |
+            (direction_shift(knights & ~BB_FILE_A, D_NNW)) |
+            (direction_shift(knights & ~(BB_FILE_D | BB_FILE_E), D_NEE)) |
+            (direction_shift(knights & ~(BB_FILE_D | BB_FILE_E), D_SEE)) |
+            (direction_shift(knights & ~(BB_FILE_A | BB_FILE_B), D_SWW)) |
+            (direction_shift(knights & ~(BB_FILE_A | BB_FILE_B), D_NWW)));
 }
 
 Bitboard attacks_bishops(Bitboard bishops, Bitboard occupied) {
@@ -87,12 +86,13 @@ Bitboard attacks_queens(Bitboard queens, Bitboard occupied) {
 }
 
 Bitboard attacks_kings(Bitboard kings) {
-    return (direction_shift(kings, D_N)) |
-           (direction_shift(kings, D_S)) |
-           (direction_shift(kings & ~BB_FILE_E, D_E)) |
-           (direction_shift(kings & ~BB_FILE_A, D_W)) |
-           (direction_shift(kings & ~BB_FILE_E, D_NE)) |
-           (direction_shift(kings & ~BB_FILE_E, D_SE)) |
-           (direction_shift(kings & ~BB_FILE_A, D_SW)) |
-           (direction_shift(kings & ~BB_FILE_A, D_NW));
+    return BB_ALL_SQUARES & 
+           ((direction_shift(kings, D_N)) |
+            (direction_shift(kings, D_S)) |
+            (direction_shift(kings & ~BB_FILE_E, D_E)) |
+            (direction_shift(kings & ~BB_FILE_A, D_W)) |
+            (direction_shift(kings & ~BB_FILE_E, D_NE)) |
+            (direction_shift(kings & ~BB_FILE_E, D_SE)) |
+            (direction_shift(kings & ~BB_FILE_A, D_SW)) |
+            (direction_shift(kings & ~BB_FILE_A, D_NW)));
 }
