@@ -171,13 +171,6 @@ Piece  move_get_promotion_type(Move move);
 bool   move_is_capture(Move move);
 bool   move_is_promotion(Move move);
 
-// Move is encoded as 0bPTTTTCDDDDDSSSSS, where:
-// P - set if move is promotion
-// T - set if P is set, promotion piece type
-// C - set if move is capture
-// D - destination square
-// S - source square
-
 // piece.c
 
 Piece     piece_create(Color color, PieceType type);
