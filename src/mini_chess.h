@@ -124,6 +124,27 @@ typedef struct Position {
     uint16_t move_count;
 } Position;
 
+// Table below shows upper bound on number of moves each piece can make
+//
+// Pawn   12 (4 promotions * 3 squares)
+// Knight 8
+// Bishop 8
+// Rook   9
+// Queen  17
+// King   8
+//
+// Position where each side has 5 pawns, king, queen, 2 rooks and knight/bishop has number of moves <= 222 moves
+// With all pawns promoted to queens number of moves is <= 272
+
+#ifndef MOVELIST_MAX_SIZE
+#define MOVELIST_MAX_SIZE 272
+#endif
+
+typedef struct MoveList {
+    Move list[MOVELIST_MAX_SIZE];
+    uint16_t size;
+} MoveList;
+
 // attacks.c
 
 Bitboard attacks_pawn(Square square, Color color);
@@ -170,6 +191,11 @@ Square move_get_destination(Move move);
 Piece  move_get_promotion_type(Move move);
 bool   move_is_capture(Move move);
 bool   move_is_promotion(Move move);
+
+// movelist.c
+
+void movelist_push(MoveList *list, Move move);
+void movelist_pop(MoveList *list);
 
 // piece.c
 
