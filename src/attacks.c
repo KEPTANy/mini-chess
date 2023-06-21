@@ -1,11 +1,28 @@
 #include "mini_chess.h"
 
+static Bitboard ATTACKS_PAWN[COLOR_NUM][SQUARE_NUM];
+static Bitboard ATTACKS_KNIGHT[SQUARE_NUM];
+static Bitboard ATTACKS_KING[SQUARE_NUM];
+
+void attacks_init() {
+    for (Square sqr = S_A1; sqr < SQUARE_NUM; sqr++) {
+        Bitboard bb = bitboard_of_square(sqr);
+
+        ATTACKS_PAWN[C_WHITE][sqr] = attacks_pawns(bb, C_WHITE);
+        ATTACKS_PAWN[C_BLACK][sqr] = attacks_pawns(bb, C_BLACK);
+
+        ATTACKS_KNIGHT[sqr] = attacks_knights(bb);
+
+        ATTACKS_KING[sqr] = attacks_kings(bb);
+    }
+}
+
 Bitboard attacks_pawn(Square square, Color color) {
-    return attacks_pawns(bitboard_of_square(square), color);
+    return ATTACKS_PAWN[color][square];
 }
 
 Bitboard attacks_knight(Square square) {
-    return attacks_knights(bitboard_of_square(square));
+    return ATTACKS_KNIGHT[square];
 }
 
 Bitboard attacks_bishop(Square square, Bitboard occupied) {
@@ -45,7 +62,7 @@ Bitboard attacks_queen(Square square, Bitboard occupied) {
 }
 
 Bitboard attacks_king(Square square) {
-    return attacks_kings(bitboard_of_square(square));
+    return ATTACKS_KING[square];
 }
 
 Bitboard attacks_pawns(Bitboard pawns, Color color) {

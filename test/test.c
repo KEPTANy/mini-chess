@@ -396,6 +396,8 @@ void test_attacks() {
 }
 
 int main() {
+    attacks_init();
+
     test_color();
     test_piece();
     test_square();

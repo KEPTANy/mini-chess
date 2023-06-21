@@ -146,6 +146,8 @@ typedef struct MoveList {
 
 // attacks.c
 
+void attacks_init();
+
 Bitboard attacks_pawn(Square square, Color color);
 Bitboard attacks_knight(Square square);
 Bitboard attacks_bishop(Square square, Bitboard occupied);
