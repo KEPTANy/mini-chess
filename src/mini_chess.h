@@ -65,13 +65,16 @@ enum {
     SQUARE_NUM
 };
 
-// Move is encoded as 0b.TTTTPDDDDDSSSSS, where:
-// S - source square
-// D - destination square
-// P - set if move is promotion
-// T - set if P is set, promotion piece type
+// Move encoding:
+//
+// 00000000 00000000 00000000 00011111 - source square
+// 00000000 00000000 00000011 11100000 - target square
+// 00000000 00000000 00111100 00000000 - moving piece
+// 00000000 00000011 11000000 00000000 - promoted piece
+// 00000000 00000100 00000000 00000000 - promotion flag
+// 00000000 00001000 00000000 00000000 - capture flag
 
-typedef uint16_t Move;
+typedef uint32_t Move;
 
 typedef int8_t Direction;
 enum {
@@ -185,12 +188,13 @@ Bitboard direction_shift(Bitboard bitboard, Direction direction);
 
 // move.c
 
-Move   move_create(Square source, Square destination);
-Move   move_promotion_create(Square source, Square destination, Piece promoted_to);
+Move   move_create(Square source, Square target, Piece moving, Piece promoted, bool is_promotion, bool is_capture);
 Square move_get_source(Move move);
-Square move_get_destination(Move move);
-Piece  move_get_promotion_type(Move move);
+Square move_get_target(Move move);
+Piece  move_get_moving_piece(Move move);
+Piece  move_get_promoted_piece(Move move);
 bool   move_is_promotion(Move move);
+bool   move_is_capture(Move move);
 
 // movelist.c
 
