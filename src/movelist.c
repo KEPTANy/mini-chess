@@ -10,7 +10,7 @@ void movelist_pop(MoveList *list) {
     list->size--;
 }
 
-bool movelist_find_move(MoveList *list, char *move) {
+int movelist_find_move(MoveList *list, char *move) {
     Move curr;
     static char ranks[] = "123456";
     static char files[] = "abcde";
@@ -23,7 +23,7 @@ bool movelist_find_move(MoveList *list, char *move) {
             ranks[square_get_rank(trg)] == move[3] &&
             ((move_is_promotion(curr) && (move[4] == piece_type_to_char(piece_get_type(move_get_promoted_piece(curr))))) ||
              (!move_is_promotion(curr) && (move[4] == '\0' || move[4] == '\n' || move[4] == ' '))))
-            return true;
+            return i;
     }
-    return false;
+    return -1;
 }

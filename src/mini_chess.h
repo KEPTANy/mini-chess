@@ -209,7 +209,7 @@ void movegen_legal(Position *pos, Color stm, MoveList *list);
 
 void movelist_push(MoveList *list, Move move);
 void movelist_pop(MoveList *list);
-bool movelist_find_move(MoveList *list, char *move);
+int movelist_find_move(MoveList *list, char *move);
 
 // piece.c
 
@@ -227,6 +227,7 @@ bool     position_equal(Position *a, Position *b);
 Bitboard position_attacks(Position *pos, Color side);
 void     position_apply_move(Position *pos, Move move);
 void     position_print(Position *pos);
+int      perft(Position *pos, int depth);
 
 // square.c
 

@@ -48,10 +48,22 @@ int main(int argc, char **argv) {
             MoveList list;
             list.size = 0;
             movegen_legal(&pos, pos.side_to_move, &list);
-            if (movelist_find_move(&list, input + 8))
+            if (movelist_find_move(&list, input + 8) != -1)
                 puts("Legal");
             else
                 puts("Illegal");
+        } else if (strncmp(input, "apply", 5) == 0) {
+            MoveList list;
+            list.size = 0;
+            movegen_legal(&pos, pos.side_to_move, &list);
+            int index = movelist_find_move(&list, input + 6);
+            if (index != -1) 
+                position_apply_move(&pos, list.list[index]);
+            else
+                puts("Illegal move");
+        } else if (strncmp(input, "perft", 5) == 0) {
+            int depth = atoi(input + 6);
+            printf("Perft for depth %d: %d moves\n", depth, perft(&pos, depth));
         }
     }
 

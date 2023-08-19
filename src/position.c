@@ -127,3 +127,20 @@ void position_print(Position *pos) {
             pos->move_count,
             pos->rule50);
 }
+
+int perft(Position *pos, int depth) {
+    MoveList list;
+    list.size = 0;
+    movegen_legal(pos, pos->side_to_move, &list);
+
+    if (depth == 1)
+        return list.size;
+
+    int res = 0;
+    for (int i = 0; i < list.size; i++) {
+        Position pos_cpy = *pos;
+        position_apply_move(&pos_cpy, list.list[i]);
+        res += perft(&pos_cpy, depth - 1);
+    }
+    return res;
+}
