@@ -4,6 +4,8 @@ SRCS = src/attacks.c \
 	   src/color.c \
 	   src/direction.c \
 	   src/move.c \
+	   src/movegen.c \
+	   src/movelist.c \
 	   src/piece.c \
 	   src/position.c \
 	   src/square.c

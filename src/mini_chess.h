@@ -1,6 +1,7 @@
 #ifndef MINI_CHESS_H
 #define MINI_CHESS_H
 
+#include <assert.h>
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -122,8 +123,9 @@ typedef struct Position {
     Bitboard color[COLOR_NUM];
     Bitboard piece[PIECE_TYPE_NUM];
     Color    side_to_move;
-    uint8_t  rule50;
+    uint16_t rule50;
     uint16_t move_count;
+    bool     can_promote[PIECE_TYPE_NUM];
 } Position;
 
 // Table below shows upper bound on number of moves each piece can make
@@ -176,7 +178,8 @@ Bitboard bitboard_of_rank(Rank rank);
 int32_t popcnt(uint64_t n);
 int32_t lsb(uint64_t n);
 int32_t msb(uint64_t n);
-int32_t pop_lsb(uint64_t *n);
+int32_t pop_lsb32(uint32_t *n);
+int32_t pop_lsb64(uint64_t *n);
 
 // color.c
 
@@ -195,28 +198,43 @@ Piece  move_get_moving_piece(Move move);
 Piece  move_get_promoted_piece(Move move);
 bool   move_is_promotion(Move move);
 bool   move_is_capture(Move move);
+bool   move_is_legal(Position *pos, Move move);
+void   move_print(Move move);
+
+// movegen.c
+
+void movegen_legal(Position *pos, Color stm, MoveList *list);
 
 // movelist.c
 
 void movelist_push(MoveList *list, Move move);
 void movelist_pop(MoveList *list);
+bool movelist_find_move(MoveList *list, char *move);
 
 // piece.c
 
 Piece     piece_create(Color color, PieceType type);
 Color     piece_get_color(Piece piece);
 PieceType piece_get_type(Piece piece);
+Piece     char_to_piece(char c);
+char      piece_to_char(Piece p);
+char      piece_type_to_char(PieceType t);
 
 // position.c
 
+void     position_set(Position *pos, char *fen);
 bool     position_equal(Position *a, Position *b);
 Bitboard position_attacks(Position *pos, Color side);
+void     position_apply_move(Position *pos, Move move);
+void     position_print(Position *pos);
 
 // square.c
 
-Square  square_create(File file, Rank rank);
-File    square_get_file(Square square);
-Rank    square_get_rank(Square square);
-uint8_t square_distance(Square a, Square b);
+void     square_init();
+Square   square_create(File file, Rank rank);
+File     square_get_file(Square square);
+Rank     square_get_rank(Square square);
+uint8_t  square_distance(Square a, Square b);
+char    *square_to_string(Square sqr);
 
 #endif
