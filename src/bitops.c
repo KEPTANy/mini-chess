@@ -2,8 +2,12 @@
 
 // TODO: implement functions instead of using GCC builtin ones
 
-int32_t popcnt(uint64_t n) {
+int32_t popcnt64(uint64_t n) {
     return __builtin_popcountll(n);
+}
+
+int32_t popcnt32(uint32_t n) {
+    return __builtin_popcount(n);
 }
 
 int32_t lsb(uint64_t n) {

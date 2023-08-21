@@ -16,7 +16,7 @@ void position_set(Position *pos, char *fen) {
                 fen++;
 
             if (*fen >= '0' && *fen <= '5') {
-                f += *fen - '0';
+                f += *fen - '0' - 1;
             } else {
                 Piece p = char_to_piece(*fen);
                 pos->color[piece_get_color(p)] |= bitboard_of_square(sqr);
@@ -131,7 +131,7 @@ void position_print(Position *pos) {
 int perft(Position *pos, int depth) {
     MoveList list;
     list.size = 0;
-    movegen_legal(pos, pos->side_to_move, &list);
+    movegen_legal(pos, pos->side_to_move, &list, false);
 
     if (depth == 0)
         return 1;

@@ -47,4 +47,5 @@ void move_print(Move move) {
     printf("%s%s", square_to_string(move_get_source(move)), square_to_string(move_get_target(move)));
     if (move_is_promotion(move))
         printf("%c", piece_type_to_char(piece_get_type(move_get_promoted_piece(move))));
+    printf("\n");
 }

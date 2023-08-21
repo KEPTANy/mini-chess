@@ -2,11 +2,14 @@
 #define MINI_CHESS_H
 
 #include <assert.h>
+#include <time.h>
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+extern clock_t stop_time;
 
 typedef uint8_t Color;
 enum {
@@ -119,6 +122,8 @@ enum {
     BB_ALL_SQUARES   = 0b111111111111111111111111111111
 };
 
+typedef int32_t Score;
+
 typedef struct Position {
     Bitboard color[COLOR_NUM];
     Bitboard piece[PIECE_TYPE_NUM];
@@ -175,7 +180,8 @@ Bitboard bitboard_of_rank(Rank rank);
 
 // bitops.c
 
-int32_t popcnt(uint64_t n);
+int32_t popcnt32(uint32_t n);
+int32_t popcnt64(uint64_t n);
 int32_t lsb(uint64_t n);
 int32_t msb(uint64_t n);
 int32_t pop_lsb32(uint32_t *n);
@@ -188,6 +194,10 @@ Color color_inverse(Color color);
 // direction.c
 
 Bitboard direction_shift(Bitboard bitboard, Direction direction);
+
+// eval.c
+
+Score evaluate(Position *pos);
 
 // move.c
 
@@ -203,13 +213,14 @@ void   move_print(Move move);
 
 // movegen.c
 
-void movegen_legal(Position *pos, Color stm, MoveList *list);
+void movegen_legal(Position *pos, Color stm, MoveList *list, bool only_captures);
 
 // movelist.c
 
 void movelist_push(MoveList *list, Move move);
 void movelist_pop(MoveList *list);
-int movelist_find_move(MoveList *list, char *move);
+int  movelist_find_move(MoveList *list, char *move);
+void movelist_sort(MoveList *list);
 
 // piece.c
 
@@ -228,6 +239,11 @@ Bitboard position_attacks(Position *pos, Color side);
 void     position_apply_move(Position *pos, Move move);
 void     position_print(Position *pos);
 int      perft(Position *pos, int depth);
+
+// search.c
+
+Score alpha_beta_max(Position *pos, Score alpha, Score beta, int depth);
+Score alpha_beta_min(Position *pos, Score alpha, Score beta, int depth);
 
 // square.c
 

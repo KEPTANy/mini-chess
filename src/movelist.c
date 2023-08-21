@@ -27,3 +27,13 @@ int movelist_find_move(MoveList *list, char *move) {
     }
     return -1;
 }
+
+static int cmp(const void *m1, const void *m2) {
+    Move a = *((Move *)m1);
+    Move b = *((Move *)m2);
+    return (move_is_promotion(b) * 2 + move_is_capture(b)) - (move_is_promotion(a) * 2 + move_is_capture(a));
+}
+
+void movelist_sort(MoveList *list) {
+    qsort(list->list, (size_t)list->size, sizeof(Move), cmp);
+}

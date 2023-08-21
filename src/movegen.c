@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-void movegen_legal(Position *pos, Color stm, MoveList *list) {
+void movegen_legal(Position *pos, Color stm, MoveList *list, bool only_captures) {
     Color inv = color_inverse(stm);
     Bitboard all = pos->color[C_WHITE] | pos->color[C_BLACK];
     for (PieceType pt = 0; pt < PIECE_TYPE_NUM; pt++) {
@@ -13,6 +13,9 @@ void movegen_legal(Position *pos, Color stm, MoveList *list) {
             if (pt == PT_PAWN) {
                 targets = ~all & direction_shift(bitboard_of_square(source), (stm == C_WHITE) ? D_N : D_S);
                 targets |= attacks_pawn(source, stm) & pos->color[inv];
+
+                if (only_captures)
+                    targets &= pos->color[inv];
 
                 while (targets) {
                     Square target = pop_lsb32(&targets);
@@ -57,6 +60,10 @@ void movegen_legal(Position *pos, Color stm, MoveList *list) {
                 }
 
                 targets &= ~pos->color[stm];
+
+                if (only_captures)
+                    targets &= pos->color[inv];
+
                 while (targets) {
                     Square target = pop_lsb32(&targets);
                     Move move = move_create(source,
@@ -72,4 +79,5 @@ void movegen_legal(Position *pos, Color stm, MoveList *list) {
             }
         }
     }
+    movelist_sort(list);
 }
