@@ -11,8 +11,6 @@ void movegen_legal(Position *pos, Color stm, MoveList *list) {
             Square source = pop_lsb32(&bb);
             Bitboard targets;
             if (pt == PT_PAWN) {
-                assert(square_get_rank(source) != R_1 && square_get_rank(source) != R_6);
-
                 targets = ~all & direction_shift(bitboard_of_square(source), (stm == C_WHITE) ? D_N : D_S);
                 targets |= attacks_pawn(source, stm) & pos->color[inv];
 

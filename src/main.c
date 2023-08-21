@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "mini_chess.h"
 
@@ -12,6 +13,7 @@ int main(int argc, char **argv) {
     mini_chess_init();
 
     Position pos;
+    MoveList list;
 
     setbuf(stdin, NULL);
     setbuf(stdout, NULL);
@@ -36,7 +38,6 @@ int main(int argc, char **argv) {
         } else if (strncmp(input, "print", 5) == 0) {
             position_print(&pos);
         } else if (strncmp(input, "movelist", 8) == 0) {
-            MoveList list;
             list.size = 0;
             movegen_legal(&pos, pos.side_to_move, &list);
             printf("Movelist for current position (%d moves):\n", list.size);
@@ -45,7 +46,6 @@ int main(int argc, char **argv) {
                 printf("\n");
             }
         } else if (strncmp(input, "islegal", 7) == 0) {
-            MoveList list;
             list.size = 0;
             movegen_legal(&pos, pos.side_to_move, &list);
             if (movelist_find_move(&list, input + 8) != -1)
@@ -53,7 +53,6 @@ int main(int argc, char **argv) {
             else
                 puts("Illegal");
         } else if (strncmp(input, "apply", 5) == 0) {
-            MoveList list;
             list.size = 0;
             movegen_legal(&pos, pos.side_to_move, &list);
             int index = movelist_find_move(&list, input + 6);
@@ -63,7 +62,11 @@ int main(int argc, char **argv) {
                 puts("Illegal move");
         } else if (strncmp(input, "perft", 5) == 0) {
             int depth = atoi(input + 6);
-            printf("Perft for depth %d: %d moves\n", depth, perft(&pos, depth));
+            clock_t timer = clock();
+            int res = perft(&pos, depth);
+            timer = clock() - timer;
+            double seconds = ((double)timer) / CLOCKS_PER_SEC;
+            printf("Perft for depth %d: %d moves (%lf seconds, %lf NPS)\n", depth, res, seconds, res / seconds);
         }
     }
 

@@ -73,7 +73,7 @@ void position_apply_move(Position *pos, Move move) {
 
     // clear source square
     pos->color[stm] &= ~bitboard_of_square(src);
-    pos->color[type] &= ~bitboard_of_square(src);
+    pos->piece[type] &= ~bitboard_of_square(src);
 
     // clear destination square
     if (move_is_capture(move)) {
@@ -133,8 +133,8 @@ int perft(Position *pos, int depth) {
     list.size = 0;
     movegen_legal(pos, pos->side_to_move, &list);
 
-    if (depth == 1)
-        return list.size;
+    if (depth == 0)
+        return 1;
 
     int res = 0;
     for (int i = 0; i < list.size; i++) {
