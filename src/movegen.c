@@ -19,7 +19,7 @@ void movegen_legal(Position *pos, Color stm, MoveList *list, bool only_captures)
 
                 while (targets) {
                     Square target = pop_lsb32(&targets);
-                    if (targets && BB_RANK_1 || targets && BB_RANK_6) {
+                    if (square_get_rank(target) == R_1 || square_get_rank(target) == R_6) {
                         for (PieceType prom = PT_KNIGHT; prom <= PT_QUEEN; prom++) {
                             if (!pos->can_promote[prom])
                                 continue;
