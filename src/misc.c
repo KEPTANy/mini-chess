@@ -104,7 +104,7 @@ void main_loop() {
         } else if (strncmp(input, "print", 5) == 0) {
             print_position(&position);
         } else if (strncmp(input, "score", 5) == 0) {
-            printf("%d\n", search(&position, atoi(input + 7)));
+            printf("%d\n", search(&position, atoi(input + 6)));
         } else if (strncmp(input, "quit", 4) == 0) {
             break;
         }
