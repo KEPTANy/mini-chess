@@ -248,6 +248,7 @@ bool history_is_repetition_draw(Hash hash);
 void mini_chess_init();
 void print_move(Move move);
 Move str_to_move(char *str);
+void print_position(Position *pos);
 void main_loop();
 
 // move.c

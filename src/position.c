@@ -79,7 +79,7 @@ bool position_equal(Position *a, Position *b) {
 }
 
 Bitboard position_attacks(Position *pos, Color side) {
-    Bitboard all = pos->color[C_WHITE] & pos->color[C_BLACK];
+    Bitboard all = pos->color[C_WHITE] | pos->color[C_BLACK];
     Bitboard clr = pos->color[side];
 
     return attacks_pawns(pos->piece[PT_PAWN] & clr, side) |

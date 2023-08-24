@@ -36,6 +36,30 @@ void print_move(Move move) {
     printf("\n");
 }
 
+void print_position(Position *pos) {
+    for (Rank r = R_6; r < RANK_NUM; r--) {
+        for (File f = F_A; f < FILE_NUM; f++) {
+            Square sqr = square_create(f, r);
+            Bitboard bb = bitboard_of_square(sqr);
+            bool printed = false;
+            for (Piece p = 0; p < PIECE_NUM; p++) {
+                if ((pos->piece[piece_get_type(p)] & bb) && (pos->color[piece_get_color(p)] & bb)) {
+                    printf("%c ", piece_to_char(p));
+                    printed = true;
+                    break;
+                }
+            }
+            if (!printed)
+                printf(". ");
+        }
+        printf("\n");
+    }
+    printf("Side to move: %s\nMove: %hu\n50-move-rule: %hu\n",
+            (pos->side_to_move == C_WHITE) ? "white" : "black",
+            1 + pos->ply / 2,
+            pos->rule50);
+}
+
 void main_loop() {
     setbuf(stdin, NULL);
     setbuf(stdout, NULL);
@@ -64,7 +88,8 @@ void main_loop() {
 
             bool is_legal = false;
             for (int i = 0; i < list.size; i++) {
-                if ((list.list[i] & 0b00000000010000111100001111111111) == move) {
+                if ((list.list[i] & 0b00000000010000111000001111111111) == move) {
+                    move = list.list[i];
                     is_legal = true;
                     break;
                 }
@@ -74,7 +99,10 @@ void main_loop() {
                 position_apply(&position, move);
         } else if (strncmp(input, "search", 6) == 0) {
             search(&position, atoi(input + 7));
+            position_apply(&position, pv_line.list[pv_line.size - 1]);
             print_move(pv_line.list[pv_line.size - 1]);
+        } else if (strncmp(input, "print", 5) == 0) {
+            print_position(&position);
         } else if (strncmp(input, "quit", 4) == 0) {
             break;
         }
