@@ -58,8 +58,6 @@ void main_loop() {
 
         if (strncmp(input, "position", 8) == 0) {
             position_set(&position, input + 9);
-
-            print_move(pv_line.list[pv_line.size - 1]);
         } else if (strncmp(input, "apply", 5) == 0) {
             Move move = str_to_move(input + 6);
             movegen(&position, &list, false);
@@ -76,6 +74,7 @@ void main_loop() {
                 position_apply(&position, move);
         } else if (strncmp(input, "search", 6) == 0) {
             search(&position, atoi(input + 7));
+            print_move(pv_line.list[pv_line.size - 1]);
         } else if (strncmp(input, "quit", 4) == 0) {
             break;
         }
