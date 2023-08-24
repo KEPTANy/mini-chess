@@ -103,6 +103,8 @@ void main_loop() {
             print_move(pv_line.list[pv_line.size - 1]);
         } else if (strncmp(input, "print", 5) == 0) {
             print_position(&position);
+        } else if (strncmp(input, "score", 5) == 0) {
+            printf("%d\n", search(&position, atoi(input + 7)));
         } else if (strncmp(input, "quit", 4) == 0) {
             break;
         }
