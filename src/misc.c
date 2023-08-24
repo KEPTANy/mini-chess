@@ -85,7 +85,6 @@ void main_loop() {
         } else if (strncmp(input, "apply", 5) == 0) {
             Move move = str_to_move(input + 6);
             movegen(&position, &list, false);
-
             bool is_legal = false;
             for (int i = 0; i < list.size; i++) {
                 if ((list.list[i] & 0b00000000010000111000001111111111) == move) {
@@ -94,12 +93,10 @@ void main_loop() {
                     break;
                 }
             }
-
             if (is_legal)
                 position_apply(&position, move);
         } else if (strncmp(input, "search", 6) == 0) {
             search(&position, atoi(input + 7));
-            position_apply(&position, pv_line.list[pv_line.size - 1]);
             print_move(pv_line.list[pv_line.size - 1]);
         } else if (strncmp(input, "print", 5) == 0) {
             print_position(&position);
