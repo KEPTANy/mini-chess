@@ -4,8 +4,6 @@ clock_t stop_time;
 bool nonstop;
 
 static Score quiescence(Position *pos, Score alpha, Score beta) {
-    if (!nonstop && clock() > stop_time)
-        return 0;
     MoveList list;
     movegen(pos, &list, false);
 
@@ -107,7 +105,7 @@ void search(Position *pos, int ms) {
             pv_line.list[i] = pv_line.list[i - 1];
         pv_line.size++;
 
-        negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, 1);
+        negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, depth);
         if (clock() > stop_time) {
             pv_line = buffer;
             break;
