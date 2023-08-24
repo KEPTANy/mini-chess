@@ -299,8 +299,8 @@ uint64_t random64();
 
 // search.c
 
-int  perft(Position *pos, int depth);
-void search(Position *pos, int ms);
+int   perft(Position *pos, int depth);
+Score search(Position *pos, int ms);
 
 // square.c
 

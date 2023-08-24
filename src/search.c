@@ -17,7 +17,7 @@ static Score quiescence(Position *pos, Score alpha, Score beta) {
     if (pos->rule50 == 100 || history_is_repetition_draw(pos->hash))
         return SCORE_DRAW;
 
-    Score eval = evaluate(pos);
+    Score eval = evaluate_relative(pos);
 
     if (eval >= beta)
         return beta;
@@ -91,12 +91,13 @@ static Score negamax(Position *pos, Score alpha, Score beta, int depth) {
     return alpha;
 }
 
-void search(Position *pos, int ms) {
+Score search(Position *pos, int ms) {
+    Score best, curr;
     pv_line.size = 1;
     nonstop = true;
     stop_time = clock() + ms * CLOCKS_PER_SEC / 1000;
 
-    negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, 1);
+    best = negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, 1);
 
     nonstop = false;
     PVLine buffer = pv_line;
@@ -105,14 +106,16 @@ void search(Position *pos, int ms) {
             pv_line.list[i] = pv_line.list[i - 1];
         pv_line.size++;
 
-        negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, depth);
+        curr = negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, depth);
         if (clock() > stop_time) {
             pv_line = buffer;
             break;
         } else {
             buffer = pv_line;
+            best = curr;
         }
     }
+    return best;
 }
 
 int perft(Position *pos, int depth) {
