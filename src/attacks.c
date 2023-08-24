@@ -28,7 +28,7 @@ Bitboard attacks_knight(Square square) {
 Bitboard attacks_bishop(Square square, Bitboard occupied) {
     Bitboard res = 0;
     static const Direction dirs[] = { D_NE, D_SE, D_SW, D_NW };
-    for (size_t i = 0; i < ARRAY_SIZE(dirs); i++) {
+    for (int i = 0; i < ARRAY_SIZE(dirs); i++) {
         for (Square curr = square + dirs[i];
              curr < SQUARE_NUM && square_distance(curr, curr - dirs[i]) == 1;
              curr += dirs[i]) {
@@ -44,7 +44,7 @@ Bitboard attacks_bishop(Square square, Bitboard occupied) {
 Bitboard attacks_rook(Square square, Bitboard occupied) {
     Bitboard res = 0;
     static const Direction dirs[] = { D_N, D_S, D_E, D_W };
-    for (size_t i = 0; i < ARRAY_SIZE(dirs); i++) {
+    for (int i = 0; i < ARRAY_SIZE(dirs); i++) {
         for (Square curr = square + dirs[i];
              curr < SQUARE_NUM && square_distance(curr, curr - dirs[i]) == 1;
              curr += dirs[i]) {

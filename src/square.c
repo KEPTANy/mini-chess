@@ -3,12 +3,14 @@
 #include <stdlib.h>
 
 static char SQUARE_TO_STR[SQUARE_NUM][3];
+static Square SQUARE_FLIP[SQUARE_NUM];
 
 void square_init() {
     for (Square s = S_A1; s < SQUARE_NUM; s++) {
         SQUARE_TO_STR[s][0] = "abcde"[square_get_file(s)];
         SQUARE_TO_STR[s][1] = "123456"[square_get_rank(s)];
         SQUARE_TO_STR[s][2] = 0;
+        SQUARE_FLIP[s] = square_create(square_get_file(s), RANK_NUM - square_get_rank(s));
     }
 }
 
@@ -30,6 +32,6 @@ uint8_t square_distance(Square a, Square b) {
     return (f > r) ? f : r;
 }
 
-char *square_to_string(Square sqr) {
-    return SQUARE_TO_STR[sqr];
+Square square_flip(Square s) {
+    return SQUARE_FLIP[s];
 }

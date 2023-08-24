@@ -1,15 +1,11 @@
 #ifndef MINI_CHESS_H
 #define MINI_CHESS_H
 
-#include <assert.h>
 #include <time.h>
 #include <inttypes.h>
 #include <stdbool.h>
-#include <stdlib.h>
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-
-extern clock_t stop_time;
 
 typedef uint8_t Color;
 enum {
@@ -75,8 +71,9 @@ enum {
 // 00000000 00000000 00000011 11100000 - target square
 // 00000000 00000000 00111100 00000000 - moving piece
 // 00000000 00000011 11000000 00000000 - promoted piece
-// 00000000 00000100 00000000 00000000 - promotion flag
-// 00000000 00001000 00000000 00000000 - capture flag
+// 00000000 00111100 00000000 00000000 - captured piece
+// 00000000 01000000 00000000 00000000 - promotion flag
+// 00000000 10000000 00000000 00000000 - capture flag
 
 typedef uint32_t Move;
 
@@ -122,14 +119,29 @@ enum {
     BB_ALL_SQUARES   = 0b111111111111111111111111111111
 };
 
+typedef uint8_t GamePhase;
+enum {
+    GP_OPENING,
+    GP_MIDGAME,
+    GP_ENDGAME
+};
+
 typedef int32_t Score;
+enum {
+    SCORE_INFINITY = 2000000000,
+    SCORE_MATE = 1000000000,
+    SCORE_DRAW = 0
+};
+
+typedef uint64_t Hash;
 
 typedef struct Position {
+    Hash     hash;
     Bitboard color[COLOR_NUM];
     Bitboard piece[PIECE_TYPE_NUM];
-    Color    side_to_move;
     uint16_t rule50;
-    uint16_t move_count;
+    uint16_t ply;
+    Color    side_to_move;
     bool     can_promote[PIECE_TYPE_NUM];
 } Position;
 
@@ -154,17 +166,40 @@ typedef struct MoveList {
     uint16_t size;
 } MoveList;
 
+#ifndef MAX_PLIES
+#define MAX_PLIES 512
+#endif
+
+typedef struct GameHistory {
+    Hash list[MAX_PLIES];
+    uint16_t size;
+} GameHistory;
+
+extern GameHistory history;
+
+#ifndef MAX_SEARCH_DEPTH
+#define MAX_SEARCH_DEPTH 64
+#endif
+
+typedef struct PVLine {
+    Move list[MOVELIST_MAX_SIZE];
+    uint8_t size;
+} PVLine;
+
+extern PVLine pv_line;
+
+extern bool nonstop;
+extern clock_t stop_time;
+
 // attacks.c
 
 void attacks_init();
-
 Bitboard attacks_pawn(Square square, Color color);
 Bitboard attacks_knight(Square square);
 Bitboard attacks_bishop(Square square, Bitboard occupied);
 Bitboard attacks_rook(Square square, Bitboard occupied);
 Bitboard attacks_queen(Square square, Bitboard occupied);
 Bitboard attacks_king(Square square);
-
 Bitboard attacks_pawns(Bitboard pawns, Color color);
 Bitboard attacks_knights(Bitboard knights);
 Bitboard attacks_bishops(Bitboard bishops, Bitboard occupied);
@@ -182,8 +217,10 @@ Bitboard bitboard_of_rank(Rank rank);
 
 int32_t popcnt32(uint32_t n);
 int32_t popcnt64(uint64_t n);
-int32_t lsb(uint64_t n);
-int32_t msb(uint64_t n);
+int32_t lsb32(uint32_t n);
+int32_t lsb64(uint64_t n);
+int32_t msb32(uint32_t n);
+int32_t msb64(uint64_t n);
 int32_t pop_lsb32(uint32_t *n);
 int32_t pop_lsb64(uint64_t *n);
 
@@ -198,28 +235,41 @@ Bitboard direction_shift(Bitboard bitboard, Direction direction);
 // eval.c
 
 Score evaluate(Position *pos);
+Score evaluate_relative(Position *pos);
+
+// history.c
+
+void history_push(Hash hash);
+void history_pop();
+bool history_is_repetition_draw(Hash hash);
+
+// misc.c
+
+void mini_chess_init();
+void print_move(Move move);
+Move str_to_move(char *str);
+void main_loop();
 
 // move.c
 
-Move   move_create(Square source, Square target, Piece moving, Piece promoted, bool is_promotion, bool is_capture);
+Move   move_create(Square source, Square target, Piece moving, Piece promoted, Piece captured, bool is_promotion, bool is_capture);
 Square move_get_source(Move move);
 Square move_get_target(Move move);
 Piece  move_get_moving_piece(Move move);
 Piece  move_get_promoted_piece(Move move);
+Piece  move_get_captured_piece(Move move);
 bool   move_is_promotion(Move move);
 bool   move_is_capture(Move move);
 bool   move_is_legal(Position *pos, Move move);
-void   move_print(Move move);
 
 // movegen.c
 
-void movegen_legal(Position *pos, Color stm, MoveList *list, bool only_captures);
+void movegen(Position *pos, MoveList *list, bool only_captures);
 
 // movelist.c
 
 void movelist_push(MoveList *list, Move move);
 void movelist_pop(MoveList *list);
-int  movelist_find_move(MoveList *list, char *move);
 void movelist_sort(MoveList *list);
 
 // piece.c
@@ -233,25 +283,30 @@ char      piece_type_to_char(PieceType t);
 
 // position.c
 
+void     position_init();
 void     position_set(Position *pos, char *fen);
+Hash     position_get_hash(Position *pos);
 bool     position_equal(Position *a, Position *b);
 Bitboard position_attacks(Position *pos, Color side);
-void     position_apply_move(Position *pos, Move move);
-void     position_print(Position *pos);
-int      perft(Position *pos, int depth);
+void     position_apply(Position *pos, Move move);
+
+// random.c
+
+void     random_init(uint32_t seed);
+uint32_t random32();
+uint64_t random64();
 
 // search.c
 
-Score alpha_beta_max(Position *pos, Score alpha, Score beta, int depth);
-Score alpha_beta_min(Position *pos, Score alpha, Score beta, int depth);
+int  perft(Position *pos, int depth);
+void search(Position *pos, int ms);
 
 // square.c
 
-void     square_init();
-Square   square_create(File file, Rank rank);
-File     square_get_file(Square square);
-Rank     square_get_rank(Square square);
-uint8_t  square_distance(Square a, Square b);
-char    *square_to_string(Square sqr);
+Square  square_create(File file, Rank rank);
+File    square_get_file(Square square);
+Rank    square_get_rank(Square square);
+uint8_t square_distance(Square a, Square b);
+Square  square_flip(Square s);
 
 #endif
