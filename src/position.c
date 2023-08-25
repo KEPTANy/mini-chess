@@ -90,6 +90,23 @@ Bitboard position_attacks(Position *pos, Color side) {
            attacks_kings(pos->piece[PT_KING] & clr);
 }
 
+GameState position_get_game_state(Position *pos) {
+    MoveList list;
+    movegen(pos, &list, false);
+
+    if (list.size == 0) {
+        if (position_attacks(pos, color_inverse(pos->side_to_move)) & pos->piece[PT_KING] & pos->color[pos->side_to_move])
+            return (pos->side_to_move == C_WHITE) ? GS_BLACK_WIN : GS_WHITE_WIN;
+        else
+            return GS_DRAW;
+    }
+
+    if (pos->rule50 == 100 || history_is_repetition_draw(pos->hash))
+        return GS_DRAW;
+
+    return GS_ONGOING;
+}
+
 void position_apply(Position *pos, Move move) {
     Square src = move_get_source(move);
     Square trg = move_get_target(move);

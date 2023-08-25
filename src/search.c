@@ -1,21 +1,17 @@
 #include "mini_chess.h"
 
+#include <stdlib.h>
+
 clock_t stop_time;
 bool nonstop;
 
 static Score quiescence(Position *pos, Score alpha, Score beta) {
-    MoveList list;
-    movegen(pos, &list, false);
+    GameState state = position_get_game_state(pos);
 
-    if (list.size == 0) {
-        if (position_attacks(pos, color_inverse(pos->side_to_move)) & pos->piece[PT_KING] & pos->color[pos->side_to_move])
-            return -SCORE_MATE;
-        else
-            return SCORE_DRAW;
-    }
-
-    if (pos->rule50 == 100 || history_is_repetition_draw(pos->hash))
+    if (state == GS_DRAW)
         return SCORE_DRAW;
+    else if (state != GS_ONGOING)
+        return -SCORE_MATE;
 
     Score eval = evaluate_relative(pos);
 
@@ -25,15 +21,15 @@ static Score quiescence(Position *pos, Score alpha, Score beta) {
     if (eval > alpha)
         alpha = eval;
 
+
+    MoveList list;
+    movegen(pos, &list, true);
     movelist_sort(&list);
 
     Position cpy = *pos;
     for (int i = 0; i < list.size; i++) {
         if (!nonstop && clock() > stop_time)
             return 0;
-
-        if (!move_is_capture(list.list[i]))
-            continue;
 
         position_apply(pos, list.list[i]);
         history_push(pos->hash);
@@ -51,22 +47,18 @@ static Score quiescence(Position *pos, Score alpha, Score beta) {
 }
 
 static Score negamax(Position *pos, Score alpha, Score beta, int depth) {
-    MoveList list;
-    movegen(pos, &list, false);
+    GameState state = position_get_game_state(pos);
 
-    if (list.size == 0) {
-        if (position_attacks(pos, color_inverse(pos->side_to_move)) & pos->piece[PT_KING] & pos->color[pos->side_to_move])
-            return -SCORE_MATE - depth;
-        else
-            return SCORE_DRAW;
-    }
-
-    if (pos->rule50 == 100 || history_is_repetition_draw(pos->hash))
+    if (state == GS_DRAW)
         return SCORE_DRAW;
+    else if (state != GS_ONGOING)
+        return -SCORE_MATE - depth;
 
     if (depth == 0)
         return quiescence(pos, alpha, beta);
 
+    MoveList list;
+    movegen(pos, &list, false);
     movelist_sort(&list);
 
     Position cpy = *pos;
@@ -93,29 +85,42 @@ static Score negamax(Position *pos, Score alpha, Score beta, int depth) {
 
 Score search(Position *pos, int ms) {
     Score best, curr;
-    pv_line.size = 1;
+    pv_line.size = 0;
     nonstop = true;
     stop_time = clock() + ms * CLOCKS_PER_SEC / 1000;
 
-    best = negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, 1);
-
-    nonstop = false;
-    PVLine buffer = pv_line;
-    for (int depth = 2; depth <= MAX_SEARCH_DEPTH; depth++) {
+    PVLine buffer;
+    for (int depth = 1; depth <= MAX_SEARCH_DEPTH && abs(best) <= SCORE_MATE; depth++) {
         for (int i = pv_line.size; i > 0; i--)
             pv_line.list[i] = pv_line.list[i - 1];
         pv_line.size++;
 
         curr = negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, depth);
+
+        nonstop = false;
         if (clock() > stop_time) {
-            pv_line = buffer;
+            if (depth > 1) {
+                pv_line = buffer;
+            } else {
+                if (curr > SCORE_MATE)
+                    best = SCORE_MATE + depth - (curr - SCORE_MATE);
+                else if (curr < -SCORE_MATE)
+                    best = -(SCORE_MATE + depth - (-curr + SCORE_MATE));
+                else
+                    best = curr;
+            }
             break;
         } else {
             buffer = pv_line;
-            best = curr;
+            if (curr > SCORE_MATE)
+                best = SCORE_MATE + depth - (curr - SCORE_MATE);
+            else if (curr < -SCORE_MATE)
+                best = -(SCORE_MATE + depth - (-curr + SCORE_MATE));
+            else
+                best = curr;
         }
     }
-    return best;
+    return (pos->side_to_move == C_BLACK) ? -best : best;
 }
 
 int perft(Position *pos, int depth) {

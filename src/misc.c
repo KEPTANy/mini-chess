@@ -33,31 +33,6 @@ void print_move(Move move) {
     printf("%c%c%c%c", files[square_get_file(src)], ranks[square_get_rank(src)], files[square_get_file(trg)], ranks[square_get_rank(trg)]);
     if (move_is_promotion(move))
         printf("%c", piece_type_to_char(piece_get_type(move_get_promoted_piece(move))));
-    printf("\n");
-}
-
-void print_position(Position *pos) {
-    for (Rank r = R_6; r < RANK_NUM; r--) {
-        for (File f = F_A; f < FILE_NUM; f++) {
-            Square sqr = square_create(f, r);
-            Bitboard bb = bitboard_of_square(sqr);
-            bool printed = false;
-            for (Piece p = 0; p < PIECE_NUM; p++) {
-                if ((pos->piece[piece_get_type(p)] & bb) && (pos->color[piece_get_color(p)] & bb)) {
-                    printf("%c ", piece_to_char(p));
-                    printed = true;
-                    break;
-                }
-            }
-            if (!printed)
-                printf(". ");
-        }
-        printf("\n");
-    }
-    printf("Side to move: %s\nMove: %hu\n50-move-rule: %hu\n",
-            (pos->side_to_move == C_WHITE) ? "white" : "black",
-            1 + pos->ply / 2,
-            pos->rule50);
 }
 
 void main_loop() {
@@ -70,19 +45,15 @@ void main_loop() {
 
     printf("ready\n");
 
-    while (1) {
-        fflush(stdout);
-        memset(input, 0, sizeof(input) * sizeof(char));
-
-        if (!fgets(input, 2048, stdin))
-            continue;
-
-        if (input[0] == '\n')
-            continue;
-
+    while (fgets(input, 2048, stdin)) {
         if (strncmp(input, "position", 8) == 0) {
             position_set(&position, input + 9);
+            puts("okpos");
         } else if (strncmp(input, "apply", 5) == 0) {
+            if (position_get_game_state(&position) != GS_ONGOING) {
+                puts("nomoves");
+                continue;
+            }
             Move move = str_to_move(input + 6);
             movegen(&position, &list, false);
             bool is_legal = false;
@@ -93,15 +64,32 @@ void main_loop() {
                     break;
                 }
             }
-            if (is_legal)
+            if (is_legal) {
                 position_apply(&position, move);
+                puts("applied");
+    
+                switch (position_get_game_state(&position)) {
+                case GS_DRAW:      puts("result draw"); break;
+                case GS_WHITE_WIN: puts("result wwin"); break;
+                case GS_BLACK_WIN: puts("result bwin"); break;
+                }
+            } else {
+                puts("illegal");
+            }
         } else if (strncmp(input, "search", 6) == 0) {
-            search(&position, atoi(input + 7));
+            if (position_get_game_state(&position) != GS_ONGOING) {
+                puts("nomoves");
+                continue;
+            }
+            Score score = search(&position, atoi(input + 7));
+            printf("bestmove ");
             print_move(pv_line.list[pv_line.size - 1]);
-        } else if (strncmp(input, "print", 5) == 0) {
-            print_position(&position);
-        } else if (strncmp(input, "score", 5) == 0) {
-            printf("%d\n", search(&position, atoi(input + 6)));
+            if (score >= SCORE_MATE)
+                printf(" wwin %d\n", score - SCORE_MATE);
+            else if (score <= -SCORE_MATE)
+                printf(" bwin %d\n", -(score + SCORE_MATE));
+            else
+                printf(" %d\n", score);
         } else if (strncmp(input, "quit", 4) == 0) {
             break;
         }

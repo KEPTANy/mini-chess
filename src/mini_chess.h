@@ -126,6 +126,14 @@ enum {
     GP_ENDGAME
 };
 
+typedef uint8_t GameState;
+enum {
+    GS_ONGOING,
+    GS_DRAW,
+    GS_WHITE_WIN,
+    GS_BLACK_WIN
+};
+
 typedef int32_t Score;
 enum {
     SCORE_INFINITY = 2000000000,
@@ -248,7 +256,6 @@ bool history_is_repetition_draw(Hash hash);
 void mini_chess_init();
 void print_move(Move move);
 Move str_to_move(char *str);
-void print_position(Position *pos);
 void main_loop();
 
 // move.c
@@ -284,12 +291,13 @@ char      piece_type_to_char(PieceType t);
 
 // position.c
 
-void     position_init();
-void     position_set(Position *pos, char *fen);
-Hash     position_get_hash(Position *pos);
-bool     position_equal(Position *a, Position *b);
-Bitboard position_attacks(Position *pos, Color side);
-void     position_apply(Position *pos, Move move);
+void      position_init();
+void      position_set(Position *pos, char *fen);
+Hash      position_get_hash(Position *pos);
+GameState position_get_game_state(Position *pos);
+bool      position_equal(Position *a, Position *b);
+Bitboard  position_attacks(Position *pos, Color side);
+void      position_apply(Position *pos, Move move);
 
 // random.c
 
