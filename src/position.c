@@ -112,7 +112,7 @@ void position_apply(Position *pos, Move move) {
     Square trg = move_get_target(move);
     Piece piece = move_get_moving_piece(move);
     Piece promoted = move_get_promoted_piece(move);
-    Piece captured = move_get_promoted_piece(move);
+    Piece captured = move_get_captured_piece(move);
     PieceType type = piece_get_type(piece);
     Color stm = piece_get_color(piece);
 
