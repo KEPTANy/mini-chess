@@ -83,6 +83,7 @@ void main_loop() {
             }
             Score score = search(&position, atoi(input + 7));
             printf("bestmove ");
+
             print_move(pv_line.list[pv_line.size - 1]);
             if (score >= SCORE_MATE)
                 printf(" wwin %d\n", score - SCORE_MATE);

@@ -21,7 +21,6 @@ static Score quiescence(Position *pos, Score alpha, Score beta) {
     if (eval > alpha)
         alpha = eval;
 
-
     MoveList list;
     movegen(pos, &list, true);
     movelist_sort(&list);
@@ -98,17 +97,8 @@ Score search(Position *pos, int ms) {
         curr = negamax(pos, -SCORE_INFINITY, SCORE_INFINITY, depth);
 
         nonstop = false;
-        if (clock() > stop_time) {
-            if (depth > 1) {
-                pv_line = buffer;
-            } else {
-                if (curr > SCORE_MATE)
-                    best = SCORE_MATE + depth - (curr - SCORE_MATE);
-                else if (curr < -SCORE_MATE)
-                    best = -(SCORE_MATE + depth - (-curr + SCORE_MATE));
-                else
-                    best = curr;
-            }
+        if (clock() > stop_time && depth > 1) {
+            pv_line = buffer;
             break;
         } else {
             buffer = pv_line;
